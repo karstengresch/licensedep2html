@@ -9,9 +9,9 @@
 
       (for further information see: http://www.mojohaus.org/license-maven-plugin/) to HTML.
 
-      Version:  0.01
+      Version:  0.02
 
-      Date:     07.10.2014
+      Date:     08.10.2014
 
       Author: Karsten Gresch
 
@@ -92,11 +92,23 @@
   </xsl:template>
 
   <xsl:template match="licenses">
-          <td>License Name</td>
-          <td>License URL</td>
-          <td>License Distribution</td>
-          <td>License Comment</td>
-          <xsl:apply-templates select="license"/>
+          <td><em>License Name</em></td>
+          <td><em>License URL</em></td>
+          <td><em>License Distribution</em></td>
+          <td><em>License Comment</em></td>
+    <xsl:choose>
+          <xsl:when test="license">
+            <xsl:apply-templates select="license"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <tr>
+            <td><xsl:text>-</xsl:text></td>
+            <td><xsl:text>-</xsl:text></td>
+            <td><xsl:text>-</xsl:text></td>
+            <td><xsl:text>-</xsl:text></td>
+            </tr>
+          </xsl:otherwise>
+    </xsl:choose>
 
   </xsl:template>
 
@@ -104,72 +116,47 @@
     <tr>
 
       <xsl:choose>
-
-        <xsl:when test="name[not(normalize-space())]">
-          <xsl:apply-templates select="name" mode="empty"/>
-        </xsl:when>
-        <xsl:when test="string(name)">
+        <xsl:when test="name">
           <xsl:apply-templates select="name" mode="placeholder"/>
         </xsl:when>
+        <xsl:otherwise>
+          <td><xsl:text>-</xsl:text></td>
+        </xsl:otherwise>
       </xsl:choose>
 
       <xsl:choose>
-
-        <xsl:when test="url[not(*)][not(normalize-space())]">
-          <xsl:apply-templates select="url" mode="empty"/>
-        </xsl:when>
-        <xsl:when test="string(url)">
+        <xsl:when test="url">
           <xsl:apply-templates select="url" mode="placeholder"/>
         </xsl:when>
+        <xsl:otherwise>
+          <td><xsl:text>-</xsl:text></td>
+        </xsl:otherwise>
       </xsl:choose>
 
 
       <xsl:choose>
-
-        <xsl:when test="url[not(*)][not(normalize-space())]">
-          <xsl:apply-templates select="distribution" mode="empty"/>
-        </xsl:when>
-        <xsl:when test="string(distribution)">
+        <xsl:when test="distribution">
           <xsl:apply-templates select="distribution" mode="placeholder"/>
         </xsl:when>
+        <xsl:otherwise>
+          <td><xsl:text>-</xsl:text></td>
+        </xsl:otherwise>
       </xsl:choose>
 
       <xsl:choose>
-        <xsl:when test="url[not(*)][not(normalize-space())]">
-          <xsl:apply-templates select="comment" mode="empty"/>
-        </xsl:when>
-        <xsl:when test="string(comment)">
+        <xsl:when test="comment">
           <xsl:apply-templates select="comment" mode="placeholder"/>
         </xsl:when>
+        <xsl:otherwise>
+          <td><xsl:text>-</xsl:text></td>
+        </xsl:otherwise>
 
       </xsl:choose>
-
-
-
-
-
-
-
-
-      <!-- <td><a><xsl:attribute name="href"><xsl:copy-of select="url" /></xsl:attribute><xsl:copy-of select="url" /></a></td>
-      <td><xsl:copy-of select="url" /></td>
-      <td><xsl:copy-of select="distribution" /></td>
-      <td><xsl:copy-of select="comment" /></td>
-      <xsl:apply-templates select="url" mode="placeholder"/>
-      <xsl:apply-templates select="distribution" mode="placeholder"/>
-      <xsl:apply-templates select="comment" mode="placeholder"/>-->
     </tr>
   </xsl:template>
 
   <xsl:template match="name | url | distribution | comment" mode="placeholder">
-    <placeholder>PL </placeholder>
       <td><xsl:copy-of select="." /></td>
-  </xsl:template>
-
-
-  <xsl:template match="name | url | distribution | comment" mode="empty">
-        <empty>EM </empty>
-        <td><xsl:text>-</xsl:text></td>
   </xsl:template>
 
 
