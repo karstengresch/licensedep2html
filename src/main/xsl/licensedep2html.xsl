@@ -19,6 +19,7 @@
 
       === Version History ===
       0.01: Initial version /2015-10-07 Karsten Gresch
+      0.02: Fixed table to make it easier for importing into Libre Office /2015-10-08 Karsten Gresch
 -->
 
 
@@ -92,13 +93,15 @@
   </xsl:template>
 
   <xsl:template match="licenses">
-          <td><em>License Name</em></td>
-          <td><em>License URL</em></td>
-          <td><em>License Distribution</em></td>
-          <td><em>License Comment</em></td>
+          <td><em>Name</em></td>
+          <td><em>URL</em></td>
+          <td><em>Distribution</em></td>
+          <td><em>Comment</em></td>
     <xsl:choose>
           <xsl:when test="license">
-            <xsl:apply-templates select="license"/>
+            <xsl:for-each select="license">
+              <xsl:apply-templates select="current()"/>
+            </xsl:for-each>
           </xsl:when>
           <xsl:otherwise>
             <tr>
@@ -144,8 +147,8 @@
       </xsl:choose>
 
       <xsl:choose>
-        <xsl:when test="comment">
-          <xsl:apply-templates select="comment" mode="placeholder"/>
+        <xsl:when test="comments">
+          <xsl:apply-templates select="comments" mode="placeholder"/>
         </xsl:when>
         <xsl:otherwise>
           <td><xsl:text>-</xsl:text></td>
@@ -155,7 +158,7 @@
     </tr>
   </xsl:template>
 
-  <xsl:template match="name | url | distribution | comment" mode="placeholder">
+  <xsl:template match="name | url | distribution | comments" mode="placeholder">
       <td><xsl:copy-of select="." /></td>
   </xsl:template>
 
